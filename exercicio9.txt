@@ -1,0 +1,48 @@
+create table tcall(
+                oid number primary key,
+                tipo number not null,
+                subtipo number not NULL,
+                data_criacao date not NULL
+);
+create table om_record(
+                oid integer primary key AUTOINCREMENT,
+                tipo number not NULL,
+                subtipo number not NULL,
+                natureza number not NULL,
+                data_criacao date not NULL
+);
+
+create table om_record_natureza(
+                oid number primary key,
+                tipo number not NULL,
+                subtipo number not NULL,
+                natureza number not NULL
+);
+
+insert into om_record_natureza values (1, 1, 1, 2);
+insert into om_record_natureza values (2, 1, 2, 4);
+insert into om_record_natureza values (3, 2, 1, 6);
+
+
+CREATE TRIGGER tcall_tg BEFORE INSERT ON tcall
+BEGIN
+ 
+  INSERT INTO om_record (tipo,
+                         subtipo,
+                         natureza,
+                         data_criacao)
+                   values ( new.tipo,
+                          new.subtipo,
+                           0,
+                           DATE());
+END;
+
+
+insert into tcall (oid, tipo, subtipo, data_criacao) values (1, 1, 1, date());
+insert into tcall (oid, tipo, subtipo, data_criacao) values (2, 1, 2, date());
+                    
+  select * from om_record 
+  
+  --- não fiz a procedure pois nao tem disponivel a criação da mesma no SQLLITE, pelo menos 
+ --- eu não encontrei, também
+  --- não consegui usar variaveis de trabalho para armazenar o campo natureza, coloquei fixo 0
